@@ -57,6 +57,7 @@ class BinaryString:
             i+=1
         return total
 
+
 class FixPointNumber(BinaryString):
     def __init__(self, binary, point):
         if type(point) != int:
@@ -87,13 +88,12 @@ class TwosComplementNumber(BinaryString):
     def __abs__(self):
         """ Returns whole number part of twos complement number as BinaryString"""
         if self.is_negative():
-            self = self._convert(self)
-        else:
-            return self
+            self = self._convert()
+        return self
 
     def _convert(self):
-        leading_one = len(self)
-        while leading_one != "1" and leading_one > 0:
+        leading_one = len(self)-1
+        while self.value[leading_one] != "1" and leading_one >= 0:
             leading_one -= 1
 
         flipped_bits = ~BinaryString(self.value[:leading_one])
@@ -106,10 +106,10 @@ class TwosComplementNumber(BinaryString):
         return self.msb
 
     def to_positive(self):
-        return abs(self)
+        return self._convert()
 
     def __neg__(self):
-        return self._convert(self)
+        return self._convert()
 
     def is_positive(self):
         if self.sign_bit == "1":
@@ -125,14 +125,20 @@ class TwosComplementNumber(BinaryString):
 
     def __int__(self):
         if self.is_negative():
-            return -int(self.to_positive())
+            # return super(TwosComplementNumber, self).int(self.to_positive())
+            return -BinaryString.__int__(self.to_positive())
         else:
-            return int(self)
+            return BinaryString.__int__(self)
+
+
+class Mantissa(TwosComplementNumber, FixPointNumber):
+    def __init__(self, value):
+        super(Mantissa, self).__init__(value, 1)
 
 
 class FloatingPointNumber():
     def __init__(self, mantissa, exponent):
-        self.mantissa = BinaryString(mantissa)
+        self.mantissa = Mantissa(mantissa)
         self.exponent = BinaryString(exponent)
 
     @classmethod
@@ -167,12 +173,11 @@ class FloatingPointNumber():
         #Convert mantissa from twos complement
 
         #Convert to integer
-        pass
+        return 4
 
 
 if __name__ == '__main__':
-    x = TwosComplementNumber("0111")
+    x = FloatingPointNumber("10000100", "1100")
     print(int(x))
-    print(int(~x))
 
 
