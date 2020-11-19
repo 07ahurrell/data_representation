@@ -166,14 +166,119 @@ class FloatingPointNumber():
 
     def __int__(self):
 
-        #Convert exponent from twos complement
-
-        #Convert to integer
-
-        #Convert mantissa from twos complement
-
-        #Convert to integer
+class Input:
+    def __init__(self):
+        pass
+    def GetInputFromUser(self):
+        while True:
+            binary = input(
+                'please enter an 8 bit binary number in twos complement(this will have an implied binary point between the 1st and 2nd bit')
+            try:
+                binary = binary.replace(' ', '')
+                decimal = int(binary, 2)
+                break
+            except:
+                print("What you entered is not Binary. Please type a binary number")
+                continue
+        self.binary = binary
+    def MantissaInput(self):
+        while True:
+            mantissa = input('please enter a 4 bit mantissa')
+            try:
+                mantissa = mantissa.replace(' ', '')
+                decimal = int(mantissa, 2)
+                break
+            except:
+                print("What you entered is not Binary. Please type a binary number")
+                continue
+        self.mantissa = mantissa
+    #def MantissaInput(self, tent):
+        #print('this is overloaded function')
+        #self.mantissa = 1010
+        #print(tent)
+    def convertmantissaToInteger(self):
+        mantissa = int(self.mantissa,2)
+        return mantissa
+    def convertBinaryToList(self):
+        result = []
+        result[:] = self.binary
+        char1 = [result[0]]
+        if char1 == ['1']:
+            finalconvert = []
+            for string in result:
+                newstring = string.replace('1', '0')
+                finalconvert.append(newstring)
+                secondstring = string.replace('0', '1')
+                finalconvert.append(secondstring)
+                del finalconvert[8:]
+        else:
+            finalconvert= []
+            finalconvert = result
+        n = 0
+        x = 0
+        for i in finalconvert:
+            y = int(i) * (2**n)
+            n+=-1
+            x = x+y
+        finalValue= x*(2**(self.convertmantissaToInteger()))
+        if char1 == ['1']:
+            finalValue = finalValue*(-1)
+        print(finalValue)
+        
         return 4
+
+
+abc = Input()
+abc.GetInputFromUser()
+abc.MantissaInput()
+abc.convertmantissaToInteger()
+abc.convertBinaryToList()
+
+
+
+class Hexidecimal():
+
+    def hexidecimalConverter(self):
+        while True:
+            binary = input('please enter a binary string with a length that is a multiple of 4 to convert into hexadecimal')
+            try:
+                bstr = binary.replace(' ', '')
+                decimal = int(bstr, 2)
+                break
+            except:
+                print("What you entered is not Binary. Please type a binary number")
+                continue
+
+        hstr = '%0*X' % ((len(bstr) + 3) // 4, int(bstr, 2))
+        print('The hexidecimal value of {} is {}'.format(binary, hstr))
+
+abc = Hexidecimal()
+abc.hexidecimalConverter()
+
+class SignBit():
+    my_list = []
+
+    for i in range(0, 9):
+        my_list.append(int(input("please enter a binary digit for your number, first digit is sign bit: ")))
+        print(my_list)
+
+    bit = 128
+    total = 0
+
+    for i in range(1, 8):
+        if (my_list[i] == 1):
+            total += bit
+        else:
+            total += 0
+        bit /= 2
+
+    if (my_list[0] == 1):
+        print(total * -1)
+    else:
+        print(total)
+
+SignBit()
+   
 
 
 if __name__ == '__main__':
